@@ -1,6 +1,5 @@
 'use client'
 import React, { useState } from 'react';
-import { readPic } from '../api/readPic';
 
 interface QuestionFormProps {
   onSubmit: (question: string, image: File | null) => void;
@@ -20,11 +19,24 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSubmit }) => {
 
     if (file) {
       try {
-        const recognizedText = await readPic(file);
-        setQuestion(recognizedText); // Update the question state with the recognized text
+        const formData = new FormData();
+		    formData.append('file', file);
+
+        let response = await fetch('/api/process', {
+          method: 'POST',
+          body: formData
+        })
+        if (response.ok) {
+          const data = await response.json(); // Parse the JSON body
+          setQuestion(data.result); 
+        } else {
+          const errorData = await response.json(); 
+          console.error('error: '+errorData.error); 
+        }
+
+        // setQuestion(recognizedText); 
       } catch (error) {
         console.error("Error recognizing text from image:", error);
-        // Optionally, handle the error (e.g., show an error message to the user)
       }
     } else {
       console.error("No image file selected.");
