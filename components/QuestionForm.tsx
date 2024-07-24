@@ -10,23 +10,13 @@ interface QuestionFormProps {
 const QuestionForm: React.FC<QuestionFormProps> = ({ onSubmit }) => {
   const [question, setQuestion] = useState('');
   const [imageFile, setImageFile] = useState();
+  const [src, setSrc] = useState("");
 
   const onQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(event.target.value);
   };
 
   const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    // if (!e.target.files || e.target.files.length === 0) {
-    //   return;
-    // }
-
-    // const file = e.target.files[0];
-    // const reader = new FileReader();
-    // reader.onload = function (upload: ProgressEvent<FileReader>) {
-    //   setImageFile(upload?.target?.result as string);
-    //   readPicture(imageFile);
-    // };
-    // reader.readAsDataURL(file);
     if (e.target.files) {
 			let file = e.target.files[0]
 
@@ -39,18 +29,25 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSubmit }) => {
         e.target.value = ''
         return
       }
-      const formData = new FormData();
-      formData.append('image', file);
 
-      readPic(formData);
+      // const formData = new FormData();
+      // formData.append('image', file);
+      // readPic(file);
+      const reader = new FileReader();  
+      reader.onload = function (upload: ProgressEvent<FileReader>) {
+        setSrc(upload?.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+      console.log('src: '+src)
+      readPicture(src) ;
 		}
   };
 
-  const readPic = async (formData: FormData) => {
+  const readPic = async (file: any) => {
     try {
-      const response = await fetch('/api/yourEndpoint', {
+      const response = await fetch('/api/process', {
         method: 'POST',
-        body: formData,
+        body: file,
       });
       const result = await response.json();
       setQuestion(result)
@@ -63,7 +60,7 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ onSubmit }) => {
   const readPicture = async (image: string) => {
     // convert image to byte Uint8Array base 64
     const blob = Buffer.from(image.split(',')[1], 'base64');
-
+    console.log('blob: '+blob);
     let response = await fetch('/api/process', {
       method: 'POST',
       body: blob,
