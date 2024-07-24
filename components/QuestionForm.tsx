@@ -1,5 +1,7 @@
 'use client'
 import React, { useState } from 'react';
+import { Buffer } from "buffer";
+globalThis.Buffer = Buffer;
 
 interface QuestionFormProps {
   onSubmit: (question: string, image: File | null) => void;
@@ -7,48 +9,80 @@ interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ onSubmit }) => {
   const [question, setQuestion] = useState('');
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [imageFile, setImageFile] = useState();
 
   const onQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(event.target.value);
   };
 
-  const handleImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files && event.target.files.length > 0 ? event.target.files[0] : null;
-    setImageFile(file);
+  const handleImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    // if (!e.target.files || e.target.files.length === 0) {
+    //   return;
+    // }
 
-    if (file) {
-      try {
-        const formData = new FormData();
-		    formData.append('file', file);
+    // const file = e.target.files[0];
+    // const reader = new FileReader();
+    // reader.onload = function (upload: ProgressEvent<FileReader>) {
+    //   setImageFile(upload?.target?.result as string);
+    //   readPicture(imageFile);
+    // };
+    // reader.readAsDataURL(file);
+    if (e.target.files) {
+			let file = e.target.files[0]
 
-        let response = await fetch('/api/process', {
-          method: 'POST',
-          body: formData
-        })
-        if (response.ok) {
-          const data = await response.json(); // Parse the JSON body
-          setQuestion(data.result); 
-        } else {
-          const errorData = await response.json(); 
-          console.error('error: '+errorData.error); 
-        }
+			if (!file) {
+				return
+			}
 
-        // setQuestion(recognizedText); 
-      } catch (error) {
-        console.error("Error recognizing text from image:", error);
+			// check if the uploaded file is an image
+      if (!(file.type.startsWith('image/'))) {
+        e.target.value = ''
+        return
       }
-    } else {
-      console.error("No image file selected.");
-    }
+      const formData = new FormData();
+      formData.append('image', file);
+
+      readPic(formData);
+		}
   };
+
+  const readPic = async (formData: FormData) => {
+    try {
+      const response = await fetch('/api/yourEndpoint', {
+        method: 'POST',
+        body: formData,
+      });
+      const result = await response.json();
+      setQuestion(result)
+      console.log(result);
+    } catch (error) {
+      console.log('Error', error);
+    }
+  }
+
+  const readPicture = async (image: string) => {
+    // convert image to byte Uint8Array base 64
+    const blob = Buffer.from(image.split(',')[1], 'base64');
+
+    let response = await fetch('/api/process', {
+      method: 'POST',
+      body: blob,
+    })
+    
+    if(response.ok) {
+      let data = await response.json();
+      console.log(data);
+      setQuestion(data.Blocks);
+    } else {
+      console.log('Error');
+    }
+
+  } 
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (question.trim() !== '') { // Ensure question is not just whitespace
-      onSubmit(question, imageFile);
       setQuestion(''); // Clear form after submit
-      setImageFile(null);
     }
   };
 
