@@ -86,25 +86,4 @@ export async function POST(req: NextRequest, res: NextResponse) {
     //         console.log('err', error);
     //     }
     // });
-
-    // const blob = req.body;
-
-    // const params = {
-    //     Document: {
-    //         Bytes: blob,
-    //     },
-    //     FeatureTypes: ['TABLES', 'FORMS'],
-    // };
-
-    // const command = new DetectDocumentTextCommand(params);
-    // try {
-    //     const data = await client.send(command);
-    //     if (data?.Blocks) {
-    //         res.status(200).json({ message: 'Success', Blocks: data.Blocks as [] });
-    //         // setData(data.Blocks as []);
-    //     }
-    //     } catch (error) {
-    //     console.log('err', error);
-    // } 
-
 };
