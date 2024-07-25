@@ -3,9 +3,9 @@ import { useState } from 'react';
 import { DetectDocumentTextCommand, TextractClient } from "@aws-sdk/client-textract";
 
 export default async function readPic(image: string, setData: any) {
-    const KEY_ID = process.env.NEXT_PUBLIC_AWS_ACCESS_ID || '';
-    const SECRET_KEY = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY || '';
-    const REGION = process.env.NEXT_PUBLIC_AWS_REGION || 'us-east-1'; 
+    const KEY_ID = process.env.NEXT_PUBLIC_AWS_ACCESS_ID;
+    const SECRET_KEY = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY;
+    const REGION = process.env.NEXT_PUBLIC_AWS_REGION; 
     
     if (!KEY_ID || !SECRET_KEY || !REGION) {
         throw new Error("AWS configuration environment variables are not defined");
