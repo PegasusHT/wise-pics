@@ -4,7 +4,7 @@ import { DetectDocumentTextCommand, TextractClient } from "@aws-sdk/client-textr
 
 export default async function readPic(image: string, setData: any) {
     const KEY_ID = process.env.NEXT_PUBLIC_AWS_ACCESS_ID;
-    const SECRET_KEY = process.env.NEXT_PUBLIC_AWS_ACCESS_KEY;
+    const SECRET_KEY = process.env.NEXT_PUBLIC_AWS_SECRET_KEY;
     const REGION = process.env.NEXT_PUBLIC_AWS_REGION; 
     
     if (!KEY_ID || !SECRET_KEY || !REGION) {
