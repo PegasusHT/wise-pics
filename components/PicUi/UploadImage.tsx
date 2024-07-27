@@ -14,7 +14,6 @@ export const UploadImage: React.FC<UploadImageProps> = ({setQuestion}) => {
 
             if (!file) return
     
-            // check if the uploaded file is an image
             if (!(file.type.startsWith('image/'))) {
                 e.target.value = ''
                 return

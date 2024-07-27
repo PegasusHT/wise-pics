@@ -1,13 +1,6 @@
 'use client'
 import React, { useState } from 'react';
 import { FiSend } from "react-icons/fi";
-import OpenAI from "openai";
-
-const key= process.env.NEXT_PUBLIC_CHAT_GPT_KEY || '';
-const openai = new OpenAI({
-  apiKey: process.env.NEXT_PUBLIC_CHAT_GPT_KEY, 
-  dangerouslyAllowBrowser: true 
-});
 
 interface QuestionFormProps {
   textImg: string;
@@ -22,25 +15,38 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
   };
 
   const onSubmit = async (question: string) => {
-    const completion = await openai.chat.completions.create({
-      messages: [{ role: "user", content: question }],
-      model: "gpt-3.5-turbo-0125",
-    });
-    
-    const result = completion.choices[0].message.content;
-    if (result !== null) {
-      setAnswer(result);
-    } else {
-      console.log('chatgpt: '+ result)
+    try {
+      const response = await fetch('/api/askgpt', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ question, textImg }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+  
+      const data = await response.json();
+      const result = data.answer;
+  
+      if (result !== null) {
+        setAnswer(result);
+      } else {
+        console.log('chatgpt: ' + result);
+      }
+    } catch (error) {
+      console.error('Error:', error);
     }
-  }  
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    if (question.trim() !== '') { // Ensure question is not just whitespace
+    if (question.trim() !== '') { 
       const questionText = 'Based on the text inside the image: ' + textImg + '\n' + question;
       onSubmit(questionText); 
-      setQuestion(''); // Clear form after submit
+      setQuestion(''); 
     }
   };
 
@@ -50,8 +56,8 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
         className="p-4 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:ring-opacity-50 resize-none"
         placeholder="Type your question here"
         value={question}
-        onChange={onQuestionChange} // Fixed missing onChange handler for question
-        rows={4} // Specify rows to control the height of the textarea
+        onChange={onQuestionChange} 
+        rows={4}
       />
 
       <button
