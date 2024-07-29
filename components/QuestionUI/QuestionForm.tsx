@@ -51,9 +51,9 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-4">
+    <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
       <textarea
-        className="p-4 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:ring-opacity-50 resize-none"
+        className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:ring-opacity-50 resize-none"
         placeholder="Type your question here"
         value={question}
         onChange={onQuestionChange} 

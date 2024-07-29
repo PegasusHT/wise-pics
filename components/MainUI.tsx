@@ -9,10 +9,10 @@ export default function MainUI() {
   const [answer, setAnswer] = useState('');
 
   return (
-    <div className="bg-white p-4 rounded-md mx-5 w-screen h-full flex flex-col justify-between">
+    <div className="bg-white p-3 mx-2 w-screen h-full flex flex-col justify-between">
         <PicUI textImg={textImg} setTextImg={setTextImg}/>
         
-        <div className="border-gray-300 border-2 h-2/5 my-4">
+        <div className="border-gray-300 rounded-lg border-2 h-2/5 my-4">
             <TextComp text={answer}/>
         </div>
 

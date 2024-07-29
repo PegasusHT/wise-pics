@@ -28,20 +28,20 @@ export const UploadImage: React.FC<UploadImageProps> = ({setQuestion}) => {
     };
 
     return(
-        <div className= 'my-2'>
+        <div className= ''>
             <div className="flex items-center space-x-2">
                 <input
                 id="imageFile"
                 type="file"
                 accept="image/*"
                 onChange={handleImageChange}
-                className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:ring-opacity-50"
+                className="p-1 border border-gray-300 rounded-md focus:outline-none focus:ring-blue-500 focus:ring-opacity-50"
                 />
             </div>
 
             <button
                 onClick={() => readPic(src, setQuestion)}
-                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md focus:outline-none mt-2 focus:ring-blue-600"
+                className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded-md focus:outline-none mt-2 mb-1 focus:ring-blue-600"
                 >
                 Generate Text inside Image
             </button>

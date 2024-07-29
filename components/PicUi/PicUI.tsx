@@ -11,7 +11,7 @@ export const PicUI: React.FC<PicUIProps> = (data) => {
     const {textImg, setTextImg} = data;
 
     return(
-        <div className='border-gray-300 border-2 h-2/5'>
+        <div className='border-gray-300 border-2 rounded-lg h-2/5'>
             <TextComp text={textImg}/>
             <UploadImage setQuestion={setTextImg}/>
         </div>
