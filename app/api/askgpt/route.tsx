@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: 'Invalid input' }, { status: 400 });
       }
   
-      const questionText = `Based on the text inside the image: ${textImg}\n${question}`;
+      const questionText = `Based on the text inside the image: ${textImg}\n` + `answer this question: ${question}`;
       const completion = await openai.chat.completions.create({
         messages: [{ role: 'user', content: questionText }],
         model: GPT_MODEL,
