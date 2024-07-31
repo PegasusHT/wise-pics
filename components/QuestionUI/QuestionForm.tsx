@@ -12,6 +12,7 @@ interface QuestionFormProps {
 
 const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer, onFocus, onBlur, isQuestionFocused }) => {
   const [question, setQuestion] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const onQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuestion(event.target.value);
@@ -44,14 +45,13 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer, onFocus
     }
   };
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    if (question.trim() !== '') { 
-      const questionText = 'Based on the text inside the image: ' + textImg + '\n' + question;
-      onSubmit(questionText); 
-      setQuestion(''); 
-      onBlur(); // Trigger blur event after submitting
-    }
+    setLoading(true);
+    await onSubmit(question); 
+    setQuestion(''); 
+    onBlur();
+    setLoading(false);
   };
 
   return (
@@ -68,10 +68,18 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer, onFocus
 
       <button
         type="submit"
-        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700"
+        className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-700 "
       >
-        Submit question
-        <FiSend className="inline-block" />
+        <div className="space-x-2 flex items-center justify-center">
+          Submit question 
+          <FiSend className="inline-block ml-2 mt-[2px]" />
+          {loading && (
+            <div className="flex justify-center items-center mt-2">
+              <div className="text-white loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-4 w-4 mt-[-5px]"></div>
+            </div>
+          )}
+        </div>
+ 
       </button>
     </form>
   ); 

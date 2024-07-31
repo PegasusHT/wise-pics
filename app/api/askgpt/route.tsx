@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
       }
   
       const questionText = `Based on the text inside the image: ${textImg}\n` + `answer this question: ${question}`;
+      console.log('q: '+questionText);
       const completion = await openai.chat.completions.create({
         messages: [{ role: 'user', content: questionText }],
         model: GPT_MODEL,
