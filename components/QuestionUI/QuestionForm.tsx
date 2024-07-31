@@ -5,9 +5,12 @@ import { FiSend } from "react-icons/fi";
 interface QuestionFormProps {
   textImg: string;
   setAnswer: (answer: string) => void;
+  onFocus: () => void;
+  onBlur: () => void;
+  isQuestionFocused: boolean;
 }
 
-const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
+const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer, onFocus, onBlur, isQuestionFocused }) => {
   const [question, setQuestion] = useState('');
 
   const onQuestionChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -47,13 +50,16 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
       const questionText = 'Based on the text inside the image: ' + textImg + '\n' + question;
       onSubmit(questionText); 
       setQuestion(''); 
+      onBlur(); // Trigger blur event after submitting
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col space-y-2">
+    <form onSubmit={handleSubmit} className={`flex flex-col space-y-2 transition-all duration-500 
+      ${isQuestionFocused ? 'h-2/5' : 'h-1/5'}`}
+     onFocus={onFocus} onBlur={onBlur}>
       <textarea
-        className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:ring-opacity-50 resize-none"
+        className="p-2 rounded-md border border-gray-300 focus:outline-none focus:ring-blue-500 focus:ring-opacity-50 resize-none h-4/5"
         placeholder="Type your question here"
         value={question}
         onChange={onQuestionChange} 
@@ -67,7 +73,6 @@ const QuestionForm: React.FC<QuestionFormProps> = ({ textImg, setAnswer }) => {
         Submit question
         <FiSend className="inline-block" />
       </button>
-
     </form>
   ); 
 };
