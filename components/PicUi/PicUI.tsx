@@ -2,13 +2,18 @@ import React, { useState } from 'react';
 import UploadImage from './UploadImage';
 import TextComp from './textComponent';
 
-export const PicUI: React.FC = () => {
-    const [text, setText] = useState("");
+interface PicUIProps {
+    textImg: string;
+    setTextImg: (text: string) => void;
+}
+
+export const PicUI: React.FC<PicUIProps> = (data) => {
+    const {textImg, setTextImg} = data;
 
     return(
-        <div className='border-gray-300 border-2 h-2/5'>
-            <TextComp text={text}/>
-            <UploadImage setQuestion={setText}/>
+        <div className='border-gray-300 border-2 border-b-0 rounded-lg h-2/5'>
+            <TextComp text={textImg}/>
+            <UploadImage setQuestion={setTextImg}/>
         </div>
     )
 }

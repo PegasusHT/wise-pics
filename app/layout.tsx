@@ -6,7 +6,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "WisePics",
-  description: "AI powered text recognition for images",
+  description: "AI Powered Text Recognition for Images",
 };
 
 export default function RootLayout({
@@ -17,7 +17,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <main className="font-sans overflow-x-hidden">
+        <main className="font-sans overflow-x-hidden h-screen">
           {children}
         </main>
       </body>
